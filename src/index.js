@@ -81,8 +81,7 @@ const transport = (options) => {
   }
 
   if (input.override) {
-    payload.message.channels.email.override = {}
-
+    
     if (input.override.bcc) {
       payload.message.channels.email.override.bcc = input.override.bcc
     }
