@@ -1,0 +1,26 @@
+{
+  "name": "nodemailer-courier-transport",
+  "version": "0.7.0",
+  "description": "Nodemailer + Courier",
+  "main": "index.js",
+  "author": "Lawrence Meckan",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/absalomedia/nodemailer-courier-transport.git"
+  },
+  "keywords": [
+    "nodemailer",
+    "courier"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/absalomedia/nodemailer-courier-transport/issues"
+  },
+  "homepage": "https://github.com/absalomedia/nodemailer-courier-transport#readme",
+  "dependencies": {
+    "@trycourier/courier": "^4.4.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+}
