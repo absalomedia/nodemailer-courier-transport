@@ -167,7 +167,7 @@ nodemailerCourier.sendMail(
 
 
 ## Timeouts
-Message timeouts can be set as part of the SendNail function. It requires a number amount in seconds.
+Message timeouts can be set as part of the SendMail function. It requires a number amount in seconds.
 
 ```js
 nodemailerCourier.sendMail(
