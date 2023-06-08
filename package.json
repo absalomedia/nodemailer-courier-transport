@@ -19,8 +19,5 @@
   "homepage": "https://github.com/absalomedia/nodemailer-courier-transport#readme",
   "dependencies": {
     "@trycourier/courier": "^4.4.0"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   }
 }
