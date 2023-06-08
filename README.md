@@ -75,7 +75,7 @@ nodemailerCourier.sendMail(
   email:  "recipient@domain.com",
   data: {
     name: "Recipient Name",
-    linkL:"https://www.courier.com/"
+    link:"https://www.courier.com/"
     }
   },
 );
@@ -91,7 +91,7 @@ nodemailerCourier.sendMail(
   email:  "recipient@domain.com",
   data: {
     name: "Recipient Name",
-    linkL:"https://www.courier.com/"
+    link:"https://www.courier.com/"
     }
   },
 );
@@ -109,7 +109,7 @@ nodemailerCourier.sendMail(
   email:  "recipient@domain.com",
   data: {
     name: "Recipient Name",
-    linkL:"https://www.courier.com/"
+    link:"https://www.courier.com/"
     }
   },
 );
@@ -135,7 +135,7 @@ nodemailerCourier.sendMail(
   email:  "recipient@domain.com",
   data: {
     name: "Recipient Name",
-    linkL:"https://www.courier.com/"
+    link:"https://www.courier.com/"
     }
   },
   override: {
@@ -176,7 +176,7 @@ nodemailerCourier.sendMail(
   email:  "recipient@domain.com",
   data: {
     name: "Recipient Name",
-    linkL:"https://www.courier.com/"
+    link:"https://www.courier.com/"
     }
   },
   timeout: 3600
