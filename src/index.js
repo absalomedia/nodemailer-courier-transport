@@ -10,31 +10,34 @@ const send = courierSend => async ({ data: input }, callback) => {
   }
 };
 
-const transport = (options) => {
-  const courier = CourierClient({ authorizationToken: options.apiKey });
-
-  let outbound = []
+const outbound = (input) => {
+  let out = []
 
   if (input.email) {
-    outbound.push({ email: input.email})
+    out.push({ email: input.email })
   }
 
   if (input.to) {
-    outbound.push({ user_id: input.to })
+    out.push({ user_id: input.to })
   }
 
   if (input.list_id) {
-    outbound.push({ list_id: input.list_id })
+    out.push({ list_id: input.list_id })
   }
 
   if (input.list_pattern) {
-    outbound.push({ list_pattern: input.list_pattern })
+    out.push({ list_pattern: input.list_pattern })
   }
 
+  return out
+}
+
+const transport = (options) => {
+  const courier = CourierClient({ authorizationToken: options.apiKey });
 
   let payload = {
     message: {
-      to: outbound,
+      to: outbound(input),
       routing: {
         method: "single",
         channels: ["email"],
@@ -81,7 +84,7 @@ const transport = (options) => {
   }
 
   if (input.override) {
-    
+
     if (input.override.bcc) {
       payload.message.channels.email.override.bcc = input.override.bcc
     }
