@@ -76,7 +76,7 @@ const transport = (options) => {
   if (input.timeout) {
     const timeout = input.timeout
     payload.message.timeout = {
-      message:timeout
+      message: timeout
     }
   }
 
