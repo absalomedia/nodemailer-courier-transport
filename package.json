@@ -2,7 +2,7 @@
   "name": "nodemailer-courier-transport",
   "version": "0.7.5",
   "description": "Nodemailer + Courier",
-  "main": "index.js",
+  "main": "src/index.js",
   "author": "Lawrence Meckan",
   "repository": {
     "type": "git",
