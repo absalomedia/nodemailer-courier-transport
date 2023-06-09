@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/absalomedia/nodemailer-courier-transport#readme",
   "dependencies": {
-    "@trycourier/courier": "^4.4.0"
+    "@trycourier/courier": "^4.4.0",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.3"
   }
 }
