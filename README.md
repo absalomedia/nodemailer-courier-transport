@@ -117,7 +117,7 @@ nodemailerCourier.sendMail(
 
 ## Overrides
 
-The ability to override email base settings, whilst not having the fine grain control of provide based overrides, has been implemented.
+The ability to override email base settings, whilst not having the fine grain control of provider based overrides, has been implemented.
 
 These overrides cover:
 
