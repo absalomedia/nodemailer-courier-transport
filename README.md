@@ -158,7 +158,7 @@ nodemailerCourier.sendMail(
   email:  "recipient@domain.com",
   data: {
     name: "Recipient Name",
-    linkL:"https://www.courier.com/"
+    link:"https://www.courier.com/"
     }
   },
   trace: "your-custom-trace-id"
