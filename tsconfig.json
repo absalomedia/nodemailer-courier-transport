@@ -5,11 +5,11 @@
         "lib": [
             "es2022"
         ],
-        "module": "commonjs",
-        "target": "es2022",
+        "declaration": true,
+        "target": "ES2015",
+        "module": "ES2020",
         "strict": true,
         "esModuleInterop": true,
-        "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "outDir": "lib"
     },
