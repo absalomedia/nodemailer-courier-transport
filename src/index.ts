@@ -1,7 +1,26 @@
+import { z } from "zod";
 import { CourierClient } from "@trycourier/courier";
 import packageData from "../package.json";
 
-const send = (courierSend: (arg0: any) => PromiseLike<{ messageId: any; }> | { messageId: any; }) => async ({ data: input }: any, callback: (arg0: unknown, arg1: { messageId: any; } | undefined) => void) => {
+type CourierSendFunction = (input: unknown) => Promise<{ messageId: string }>;
+
+type SendCallback = (error: Error | null, result?: { messageId: string }) => void;
+
+type Input = {
+  email?: string;
+  to?: string;
+  list_id?: string;
+  list_pattern?: string;
+};
+
+const Options = z.object({
+  apiKey: z.string(),
+});
+
+const send = (courierSend: CourierSendFunction) => async (
+  { data: input }: { data: Input },
+  callback: SendCallback
+) => {
   try {
     const { messageId } = await courierSend(input);
     callback(null, { messageId });
@@ -10,8 +29,8 @@ const send = (courierSend: (arg0: any) => PromiseLike<{ messageId: any; }> | { m
   }
 };
 
-const outbound = (input: { email: string; to: string; list_id: string; list_pattern: any; }) => {
-  const out = [];
+const outbound = (input: Input) => {
+  let out: { email?: string; user_id?: string; list_id?: string; list_pattern?: string }[] = [];
 
   if (input.email) {
     out.push({ email: input.email });
@@ -32,39 +51,146 @@ const outbound = (input: { email: string; to: string; list_id: string; list_patt
   return out;
 };
 
-const transport = (options: { apiKey: any; input: { data: any; brand_id: any; template: any; trace_id: any; provider: any; timeout: any; override: { bcc: any; cc: any; from: any; subject: any; reply_to: any; }; }; }) => {
+// Usage example
+const options = {
+  apiKey: "YOUR_API_KEY",
+};
+
+type MessagePayload = {
+  to: any[];
+  routing: {
+    method: "single";
+    channels: string[];
+  };
+  data?: {
+    [key: string]: unknown;
+  };
+  brand_id?: string;
+  template?: string;
+  provider?: string;
+  timeout?: {
+    message: number;
+  };
+};
+
+type OverridePayload = {
+  bcc?: string;
+  cc?: string;
+  from?: string;
+  subject?: string;
+  reply_to?: string;
+};
+
+type DataPayload = {
+  data?: {
+    [key: string]: unknown;
+  };
+  brand_id?: string;
+  template?: string;
+  trace_id?: string;
+  provider?: string;
+  timeout?: number;
+  override?: OverridePayload;
+};
+
+type Payload = {
+  message: MessagePayload & {
+    data?: {
+      [key: string]: unknown;
+    };
+  };
+};
+
+
+
+const inputSchema = z.object({
+  data: z.record(z.unknown()).optional(),
+  brand_id: z.string().optional(),
+  template: z.string().optional(),
+  trace_id: z.string().optional(),
+  provider: z.string().optional(),
+  timeout: z.number().optional(),
+  override: z.object({
+    bcc: z.string().optional(),
+    cc: z.string().optional(),
+    from: z.string().optional(),
+    subject: z.string().optional(),
+    reply_to: z.string().optional(),
+  }).optional(),
+});
+
+const transport = (options: Options, input: inputSch ) => {
   const courier = CourierClient({ authorizationToken: options.apiKey });
 
-  const payload = {
+  const payload: Payload = {
     message: {
-      to: outbound(options.input),
+      to: outbound(input),
       routing: {
         method: "single",
         channels: ["email"],
       },
-      data: { ...options.input.data },
-      brand_id: options.input.brand_id,
-      template: options.input.template,
-      metadata: options.input.trace_id ? { trace_id: options.input.trace_id } : undefined,
-      provider: options.input.provider,
-      timeout: options.input.timeout ? { message: options.input.timeout } : undefined,
-      override: options.input.override
-        ? {
-            channels: {
-              email: {
-                override: {
-                  bcc: options.input.override.bcc,
-                  cc: options.input.override.cc,
-                  from: options.input.override.from,
-                  subject: options.input.override.subject,
-                  reply_to: options.input.override.reply_to,
-                },
-              },
-            },
-          }
-        : undefined,
     },
   };
+
+  if (input.data) {
+    const dataPayload = input.data;
+    payload.message.data = {
+      ...dataPayload,
+    };
+  }
+
+  if (input.brand_id) {
+    const dataBrand = input.brand_id;
+    payload.message.brand_id = dataBrand;
+  }
+
+  if (input.template) {
+    const template = input.template;
+    payload.message.template = template;
+  }
+
+  if (input.trace_id) {
+    const trace = input.trace_id;
+    payload.message.template = {
+      metadata: {
+        trace_id: trace,
+      },
+    };
+  }
+
+  if (input.provider) {
+    const provider = input.provider;
+    payload.message.provider = provider;
+  }
+
+  if (input.timeout) {
+    const timeout = input.timeout;
+    payload.message.timeout = {
+      message: timeout,
+    };
+  }
+
+  if (input.override) {
+    if (input.override.bcc) {
+      payload.message.channels.email.override.bcc = input.override.bcc;
+    }
+
+    if (input.override.cc) {
+      payload.message.channels.email.override.cc = input.override.cc;
+    }
+
+    if (input.override.from) {
+      payload.message.channels.email.override.from = input.override.from;
+    }
+
+    if (input.override.subject) {
+      payload.message.channels.email.override.subject = input.override.subject;
+    }
+
+    if (input.override.reply_to) {
+      payload.message.channels.email.override.reply_to = input.override.reply_to;
+    }
+  }
 
   const courierSend = courier.send({ payload });
 
@@ -77,4 +203,4 @@ const transport = (options: { apiKey: any; input: { data: any; brand_id: any; te
 
 transport._send = send;
 
-export default transport;
+module.exports = transport
