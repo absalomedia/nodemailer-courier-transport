@@ -104,7 +104,7 @@ Specifying a branded template design can be set as part of the SendMail function
 ```js
 nodemailerCourier.sendMail(
   {
-  brand: "courier-brand-id"  // Configured in Courier UI
+  brand: "courier-brand-id",  // Configured in Courier UI
   template: "courier-template-id",  // Configured in Courier UI
   email:  "recipient@domain.com",
   data: {
