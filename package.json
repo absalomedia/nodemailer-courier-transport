@@ -1,6 +1,6 @@
 {
   "name": "nodemailer-courier-transport",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "description": "Nodemailer + Courier",
   "main": "index.js",
   "author": "Lawrence Meckan",
