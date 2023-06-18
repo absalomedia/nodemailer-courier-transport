@@ -6,56 +6,6 @@ type CourierSendFunction = (input: unknown) => Promise<{ messageId: string }>;
 
 type SendCallback = (error: unknown, result?: { messageId: string }) => void;
 
-type Input = {
-  email?: string;
-  to?: string;
-  list_id?: string;
-  list_pattern?: string;
-};
-
-const Options = z.object({
-  apiKey: z.string(),
-});
-
-const send = (courierSend: CourierSendFunction) => async (
-  { data: input }: { data: Input },
-  callback: SendCallback
-) => {
-  try {
-    const { messageId } = await courierSend(input);
-    callback(null, { messageId });
-  } catch (error) {
-    callback(error);
-  }
-};
-
-const outbound = (input: Input) => {
-  let out: { email?: string; user_id?: string; list_id?: string; list_pattern?: string }[] = [];
-
-  if (input.email) {
-    out.push({ email: input.email });
-  }
-
-  if (input.to) {
-    out.push({ user_id: input.to });
-  }
-
-  if (input.list_id) {
-    out.push({ list_id: input.list_id });
-  }
-
-  if (input.list_pattern) {
-    out.push({ list_pattern: input.list_pattern });
-  }
-
-  return out;
-};
-
-// Usage example
-const options = {
-  apiKey: "YOUR_API_KEY",
-};
-
 type MessagePayload = {
   to: any[];
   routing: {
@@ -82,6 +32,10 @@ type OverridePayload = {
 };
 
 type DataPayload = {
+  email?: string;
+  to?: string;
+  list_id?: string;
+  list_pattern?: string;
   data?: {
     [key: string]: unknown;
   };
@@ -99,25 +53,46 @@ type Payload = {
   };
 };
 
+type Options = {
+  apiKey: string
+}
+
+const send = (courierSend: CourierSendFunction) => async (
+  { data: input }: { data: DataPayload },
+  callback: SendCallback
+) => {
+  try {
+    const { messageId } = await courierSend(input);
+    callback(null, { messageId });
+  } catch (error) {
+    callback(error);
+  }
+};
+
+const outbound = (input: DataPayload) => {
+  let out: { email?: string; user_id?: string; list_id?: string; list_pattern?: string }[] = [];
+
+  if (input.email) {
+    out.push({ email: input.email });
+  }
+
+  if (input.to) {
+    out.push({ user_id: input.to });
+  }
+
+  if (input.list_id) {
+    out.push({ list_id: input.list_id });
+  }
+
+  if (input.list_pattern) {
+    out.push({ list_pattern: input.list_pattern });
+  }
+
+  return out;
+};
 
 
-const inputSchema = z.object({
-  data: z.record(z.unknown()).optional(),
-  brand_id: z.string().optional(),
-  template: z.string().optional(),
-  trace_id: z.string().optional(),
-  provider: z.string().optional(),
-  timeout: z.number().optional(),
-  override: z.object({
-    bcc: z.string().optional(),
-    cc: z.string().optional(),
-    from: z.string().optional(),
-    subject: z.string().optional(),
-    reply_to: z.string().optional(),
-  }).optional(),
-});
-
-const transport = (options: typeof Options, input: typeof inputSchema ) => {
+const transport = (options: Options, input: DataPayload ) => {
   const courier = CourierClient({ authorizationToken: options.apiKey });
 
   const payload: Payload = {

@@ -21,7 +21,8 @@
     "url": "https://github.com/absalomedia/nodemailer-courier-transport/issues"
   },
   "scripts": {
-    "tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json"
+    "tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "prepublishOnly": "npm run tsc"
   },
   "homepage": "https://github.com/absalomedia/nodemailer-courier-transport#readme",
   "dependencies": {
