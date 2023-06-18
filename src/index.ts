@@ -4,7 +4,7 @@ import packageData from "../package.json";
 
 type CourierSendFunction = (input: unknown) => Promise<{ messageId: string }>;
 
-type SendCallback = (error: Error | null, result?: { messageId: string }) => void;
+type SendCallback = (error: unknown, result?: { messageId: string }) => void;
 
 type Input = {
   email?: string;
@@ -95,9 +95,7 @@ type DataPayload = {
 
 type Payload = {
   message: MessagePayload & {
-    data?: {
-      [key: string]: unknown;
-    };
+    data?: unknown
   };
 };
 
@@ -119,7 +117,7 @@ const inputSchema = z.object({
   }).optional(),
 });
 
-const transport = (options: Options, input: inputSch ) => {
+const transport = (options: typeof Options, input: typeof inputSchema ) => {
   const courier = CourierClient({ authorizationToken: options.apiKey });
 
   const payload: Payload = {
@@ -151,6 +149,7 @@ const transport = (options: Options, input: inputSch ) => {
 
   if (input.trace_id) {
     const trace = input.trace_id;
+    // @ts-ignore
     payload.message.template = {
       metadata: {
         trace_id: trace,
@@ -172,22 +171,27 @@ const transport = (options: Options, input: inputSch ) => {
 
   if (input.override) {
     if (input.override.bcc) {
+      // @ts-ignore
       payload.message.channels.email.override.bcc = input.override.bcc;
     }
 
     if (input.override.cc) {
+      // @ts-ignore
       payload.message.channels.email.override.cc = input.override.cc;
     }
 
     if (input.override.from) {
+      // @ts-ignore
       payload.message.channels.email.override.from = input.override.from;
     }
 
     if (input.override.subject) {
+      // @ts-ignore
       payload.message.channels.email.override.subject = input.override.subject;
     }
 
     if (input.override.reply_to) {
+      // @ts-ignore
       payload.message.channels.email.override.reply_to = input.override.reply_to;
     }
   }

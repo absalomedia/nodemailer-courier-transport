@@ -1,6 +1,6 @@
 {
   "name": "nodemailer-courier-transport",
-  "version": "0.7.6",
+  "version": "0.8.0",
   "description": "Nodemailer + Courier",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -26,6 +26,7 @@
   "homepage": "https://github.com/absalomedia/nodemailer-courier-transport#readme",
   "dependencies": {
     "@trycourier/courier": "^4.4.0",
+    "@types/node": "^20.3.1",
     "zod": "^3.21.4"
   },
   "devDependencies": {
